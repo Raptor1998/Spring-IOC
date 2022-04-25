@@ -7,8 +7,8 @@ public class AppConfigTest {
     public static void main(String[] args) {
         OwnAnnotationConfigApplicationContext ownAnnotationConfigApplicationContext = new OwnAnnotationConfigApplicationContext(AppConfig.class);
         for (int i = 0; i < 1; i++) {
-            Object account = ownAnnotationConfigApplicationContext.getBean("account");
-            System.out.println(account);
+            Object test = ownAnnotationConfigApplicationContext.getBean("aopTest");
+            System.out.println(test);
         }
     }
 }

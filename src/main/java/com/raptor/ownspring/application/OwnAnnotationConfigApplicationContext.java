@@ -76,6 +76,7 @@ public class OwnAnnotationConfigApplicationContext {
                                 String methodName = "set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
                                 Method method = beanClass.getMethod(methodName, declaredField.getType());
                                 Object o1 = cache.get(beanDefinition.getBeanName());
+                                System.out.println(o.getClass());
                                 method.invoke(o1, o);
                             } catch (Exception e) {
                                 e.printStackTrace();
