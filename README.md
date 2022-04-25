@@ -3,7 +3,7 @@ a simple version of spring IOC
 
 **好莱坞法则：“别找我们，我们找你”**；即由IoC容器帮对象找相应的依赖对象并注入，而不是由对象主动去找。
 
-# IOC基础
+# IOC Foundation
 
 控制反转，把对象的创建和对象之间的调用过程，交给spring进行管理，使用IOC目的，为了降低耦合度
 
@@ -57,7 +57,7 @@ public class BeanFactory {
 }
 ```
 
-## 注解方式
+## use annotation
 
 ```java
         //加载IoC容器
@@ -70,9 +70,9 @@ public class BeanFactory {
         }
 ```
 
-# own spring
+# own spring——Annotation
 
-## 实现思路
+## implementation steps
 
 1. 自定义一个AnnotationConfigApplicationContext，构造器中传入要扫描的包。
 
@@ -84,7 +84,7 @@ public class BeanFactory {
 
 5. 提供 getBean 等方法，通过 beanName 取出对应的bean 即可。
 
-## 自定义注解
+## declaration annotation
 
 ```java
 @interface OwnAutowired
@@ -93,7 +93,7 @@ public class BeanFactory {
 @interface OwnValue
 ```
 
-## 自定义AnnotationConfigApplicationContext
+## declaration AnnotationConfigApplicationContext
 
 ```java
 public class OwnAnnotationConfigApplicationContext {
@@ -113,7 +113,7 @@ public class OwnAnnotationConfigApplicationContext {
 }
 ```
 
-## 注解扫描
+## scan declaration annotation
 
 包扫描详见此包下的com.raptor.ownspring.utils.MyTools
 
@@ -149,7 +149,7 @@ public Set<BeanDefinition> findBeanDefinition(String packageName) {
     }
 ```
 
-## 反射创建、属性注入
+## reflex and attribute injection
 
 ```java
 public void createObject(Set<BeanDefinition> beanDefinitions) {
@@ -277,7 +277,139 @@ public static void main(String[] args) {
 }
 ```
 
-# 参考资料
+# Bean Scope
+
+## declaration annotation
+
+```java
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface OwnScope {
+    String value();
+}
+```
+
+## create bean
+
+```java
+//如果有bean的作用域
+if (aClass.isAnnotationPresent(OwnScope.class)) {
+   	OwnScope scopeAnnotation = aClass.getDeclaredAnnotation(OwnScope.class);
+   	beanDefinition.setScope(scopeAnnotation.value());
+   	if (scopeAnnotation.value().equals("singleton")) {
+        set.add(beanDefinition);
+   		}
+	} else {
+    	//默认是单例bean
+    	beanDefinition.setScope("singleton");
+        //单例bean等会直接创建对象
+        set.add(beanDefinition);
+}
+```
+
+## get bean
+
+```java
+public Object getBean(String beanName) {
+    if (beanDefinitionMap.containsKey(beanName)) {
+        System.out.println(beanName);
+        BeanDefinition beanDefinition = beanDefinitionMap.get(beanName);
+        if (beanDefinition.getScope().equals("singleton")) {
+            return cache.get(beanName);
+        } else {
+            return createBean(beanDefinition);
+        }
+    } else {
+        throw new RuntimeException(beanName + " not exist");
+    }
+
+}
+```
+
+# own spring——AppConfig
+
+## declaration annotation
+
+```java
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface OwnComponentScan {
+    String value();
+}
+```
+
+# own spring——simple AOP
+
+## BeanPostProcessor
+
+```java
+@OwnComponent
+public class OwnBeanPost implements BeanPostProcessor {
+
+    @Override
+    public Object postProcessBeforeInitialization(Object bean, String beanName) {
+
+        if (beanName.equals("account")) {
+            System.out.println("bean的初始化前");
+            ((Account) bean).test();
+            ((Account) bean).setName("铠甲勇士");
+        }
+        return bean;
+    }
+
+    @Override
+    public Object postProcessAfterInitialization(Object bean, String beanName) {
+        System.out.println("bean的初始化后");
+
+        if (beanName.equals("aopTest")) {
+            Object proxyInstance = Proxy.newProxyInstance(BeanPostProcessor.class.getClassLoader(), bean.getClass().getInterfaces(), new InvocationHandler() {
+                @Override
+                public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                    System.out.println("初始化之后的代理逻辑");
+                    return method.invoke(bean,args);
+                }
+            });
+            return proxyInstance;
+        }
+
+        return bean;
+    }
+}
+```
+
+## create postProcessor
+
+```java
+OwnComponent annotation = aClass.getAnnotation(OwnComponent.class);
+if (annotation != null) {
+
+    //如果是特殊的processor
+    if (BeanPostProcessor.class.isAssignableFrom(aClass)) {
+        try {
+            BeanPostProcessor beanPostProcessor = (BeanPostProcessor) aClass.getDeclaredConstructor().newInstance();
+            beanPostProcessors.add(beanPostProcessor);
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+    }
+```
+
+## when create bean
+
+```java
+//bean post processor
+for (BeanPostProcessor beanPostProcessor : beanPostProcessors) {
+    object = beanPostProcessor.postProcessAfterInitialization(object, beanName);
+}
+```
+
+# reference
 
 [Spring基础 - Spring核心之控制反转(IOC)](https://www.pdai.tech/md/spring/spring-x-framework-ioc.html)
 
