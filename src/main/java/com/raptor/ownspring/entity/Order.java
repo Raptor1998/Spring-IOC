@@ -1,5 +1,6 @@
 package com.raptor.ownspring.entity;
 
+import com.raptor.ownspring.annotation.OwnAutowired;
 import com.raptor.ownspring.annotation.OwnComponent;
 import com.raptor.ownspring.annotation.OwnValue;
 import lombok.Data;
@@ -11,4 +12,6 @@ public class Order {
     private String orderId;
     @OwnValue("1000.2")
     private Float price;
+//    @OwnAutowired
+//    private Account account;
 }

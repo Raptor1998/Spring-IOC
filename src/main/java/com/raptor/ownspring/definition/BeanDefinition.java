@@ -3,8 +3,17 @@ package com.raptor.ownspring.definition;
 public class BeanDefinition {
     private String beanName;
     private Class beanClass;
+    private String scope;
 
     public BeanDefinition() {
+    }
+
+    public String getScope() {
+        return scope;
+    }
+
+    public void setScope(String scope) {
+        this.scope = scope;
     }
 
     public BeanDefinition(String beanName, Class beanClass) {
