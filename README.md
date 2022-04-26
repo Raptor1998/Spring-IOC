@@ -1,6 +1,8 @@
 # Spring-IOC
 **a simple version of spring IOC and AOP Demo**
 
+一个简化版本的注入，直接将半成品对象放入缓存中，不考虑aop增强
+
 **好莱坞法则：“别找我们，我们找你”**；即由IoC容器帮对象找相应的依赖对象并注入，而不是由对象主动去找。
 
 # IOC Foundation
