@@ -6,8 +6,6 @@ import com.raptor.ownspring.aware.BeanNameAware;
 import com.raptor.ownspring.definition.BeanDefinition;
 import com.raptor.ownspring.initializing.InitializingBean;
 import com.raptor.ownspring.utils.MyTools;
-import com.sun.org.apache.xml.internal.security.Init;
-import sun.reflect.generics.scope.Scope;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;

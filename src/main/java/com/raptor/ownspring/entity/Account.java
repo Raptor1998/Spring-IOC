@@ -3,6 +3,7 @@ package com.raptor.ownspring.entity;
 import com.raptor.ownspring.annotation.*;
 import com.raptor.ownspring.aware.BeanNameAware;
 import com.raptor.ownspring.initializing.InitializingBean;
+import com.raptor.ownspring.inte.IAop;
 import lombok.Data;
 
 //@Data
@@ -30,7 +31,7 @@ public class Account implements BeanNameAware, InitializingBean {
     private Integer age;
     @OwnAutowired
 //    @OwnQualifier(value = "orderTest")
-    private Order order;
+    private IAop order;
 
     public Account() {
     }
@@ -59,11 +60,11 @@ public class Account implements BeanNameAware, InitializingBean {
         this.age = age;
     }
 
-    public Order getOrder() {
+    public IAop getOrder() {
         return order;
     }
 
-    public void setOrder(Order order) {
+    public void setOrder(IAop order) {
         this.order = order;
     }
 

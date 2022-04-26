@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @OwnComponent("orderTest")
-public class Order{
+public class Order implements IAop{
     @OwnValue("qsad")
     private String orderId;
     @OwnValue("1000.2")

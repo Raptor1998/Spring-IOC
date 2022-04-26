@@ -41,6 +41,8 @@ public class OwnBeanPost implements BeanPostProcessor {
                 }
             });
             return proxyInstance;
+        }else if (beanName.equals("orderTest")){
+            System.out.println("order 增强测试");
         }
 
         return bean;
