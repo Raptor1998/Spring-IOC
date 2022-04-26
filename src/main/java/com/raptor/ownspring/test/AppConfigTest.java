@@ -2,6 +2,7 @@ package com.raptor.ownspring.test;
 
 import com.raptor.ownspring.application.OwnAnnotationConfigApplicationContext;
 import com.raptor.ownspring.config.AppConfig;
+import com.raptor.ownspring.entity.Account;
 
 public class AppConfigTest {
     public static void main(String[] args) {

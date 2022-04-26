@@ -4,6 +4,7 @@ import com.raptor.ownspring.BeanPostProcessor;
 import com.raptor.ownspring.annotation.OwnComponent;
 import com.raptor.ownspring.entity.Account;
 import com.raptor.ownspring.entity.Order;
+import com.raptor.ownspring.inte.IAop;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -43,6 +44,15 @@ public class OwnBeanPost implements BeanPostProcessor {
             return proxyInstance;
         }else if (beanName.equals("orderTest")){
             System.out.println("order 增强测试");
+            //有问题   代理对象返回类型不对
+            //Object proxyInstance = Proxy.newProxyInstance(BeanPostProcessor.class.getClassLoader(), bean.getClass().getInterfaces(), new InvocationHandler() {
+            //    @Override
+            //    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+            //        ((Order)bean).setPrice(1000f);
+            //        return method.invoke(bean,args);
+            //    }
+            //});
+            //return proxyInstance;
         }
 
         return bean;
