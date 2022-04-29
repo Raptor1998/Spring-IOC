@@ -74,6 +74,16 @@ public class BeanFactory {
 
 # own spring——Annotation
 
+## bean life
+
+1. 实例化Bean：通过反射调用构造方法实例化对象。
+2. 依赖注入：装配Bean的属性
+3. 实现了Aware接口的Bean，执行接口方法：如顺序执行BeanNameAware、BeanFactoryAware、 ApplicationContextAware的接口方法。
+4. Bean对象初始化前，循环调用实现了BeanPostProcessor接口的预初始化方法 （postProcessBeforeInitialization）
+5. Bean对象初始化：顺序执行@PostConstruct注解方法、InitializingBean接口方法、init-method方法
+6. Bean对象初始化后，循环调用实现了BeanPostProcessor接口的后初始化方法 （postProcessAfterInitialization）
+7. 容器关闭时，执行Bean对象的销毁方法，顺序是：@PreDestroy注解方法、DisposableBean接口方法、destroy-method
+
 ## implementation steps
 
 1. 自定义一个AnnotationConfigApplicationContext，构造器中传入要扫描的包。
